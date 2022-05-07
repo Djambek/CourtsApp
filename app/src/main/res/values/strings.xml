@@ -5,4 +5,8 @@
     <string name="str_home">Home</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="todo">TODO</string>
+    <string name="unique_court_case">например, 77OS0000-05-2018-008038-16</string>
+    <string name="number_of_court_case">например, 02-1234/2018</string>
+    <string name="court_competitors">Фамилия И.О. или наименование орг.</string>
 </resources>

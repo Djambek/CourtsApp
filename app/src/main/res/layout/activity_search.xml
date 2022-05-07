@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/primary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_search"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="152dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="84dp"
+                android:layout_marginBottom="100dp"
+                android:elevation="20dp"
+                android:text="Поиск"
+                android:textAppearance="@style/MaterialAlertDialog.Material3"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                app:backgroundTint="#DCDCDC"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInput_parts" />
+
+            <TextView
+                android:id="@+id/text_court"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:text="Суд"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_instance"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:text="Инстанция"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_court" />
+
+            <TextView
+                android:id="@+id/text_disturbance"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:text="Производство"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_instance" />
+
+            <TextView
+                android:id="@+id/text_unique_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:text="Уникальный идентификатор  дела"
+                android:textSize="23sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_disturbance"
+                app:layout_constraintTop_toBottomOf="@+id/text_disturbance" />
+
+            <TextView
+                android:id="@+id/text_number_case"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="20dp"
+                android:text="Номер дела, материала ..."
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInput_unique_id" />
+
+            <TextView
+                android:id="@+id/text_number_doc"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="20dp"
+                android:text="Номер входящего документа"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInput_number_case" />
+
+            <TextView
+                android:id="@+id/text_parts"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:text="Стороны"
+                android:textSize="23sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInput_number_doc" />
+
+            <Spinner
+                android:id="@+id/spinner_courts"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/text_court"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_court" />
+
+            <Spinner
+                android:id="@+id/spinner_instances"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/text_instance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_instance" />
+
+            <Spinner
+                android:id="@+id/spinner_disturbance"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/text_disturbance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_disturbance" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput_unique_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="10dp"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/text_unique_id"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_unique_id">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/unique_court_case" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput_number_case"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/textInput_unique_id"
+                app:layout_constraintStart_toStartOf="@+id/text_number_case"
+                app:layout_constraintTop_toBottomOf="@+id/text_number_case">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/number_of_court_case" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput_parts"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/textInput_number_case"
+                app:layout_constraintStart_toStartOf="@+id/text_parts"
+                app:layout_constraintTop_toBottomOf="@+id/text_parts">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/court_competitors"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput_number_doc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="номер документа в канцелярии суда"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/textInput_number_case"
+                app:layout_constraintStart_toStartOf="@+id/text_number_doc"
+                app:layout_constraintTop_toBottomOf="@+id/text_number_doc">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

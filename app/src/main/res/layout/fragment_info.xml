@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/text_spinner_number_case"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"

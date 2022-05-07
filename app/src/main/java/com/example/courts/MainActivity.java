@@ -7,11 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+
+import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
@@ -20,6 +23,17 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // тут происходить создание таблицы
+        DataBase db = new DataBase(this);
+        db.close();
+
+        Paper.init(this);
+        Log.d("PAPER", Paper.book().read("city")+"a");
+        if (Paper.book().read("city") == null){
+            Intent intent = new Intent(MainActivity.this, FirstRun.class);
+            startActivity(intent);
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
