@@ -32,10 +32,10 @@ public class DataBase {
 
     void addNewCase(String id, String number, String number_input_document, ArrayList<String> participants,
                     String register_date, String date_hearing_first_instance, String date_of_appellate_instance,
-                    String result_hearing, String number_in_next_instance, String url_number_in_next_instance, String number_in_last_instance, String url_number_in_last_instance,
+                    String result_hearing, String number_in_next_instance,  String number_in_last_instance,
                     String judge, String category, String status, String article,
                     String resons_solve, String date_of_decision) {
-        db.execSQL("INSERT INTO 'case' VALUES ('"+id+"', '"+number+"', '"+number_input_document+"', '"+register_date+"', '"+date_hearing_first_instance+"', '"+date_of_appellate_instance+"', '"+result_hearing+"', '"+number_in_next_instance+"', '"+url_number_in_next_instance+"', '"+number_in_last_instance+"', '"+url_number_in_last_instance+"', '"+judge+"', '"+category+"', '"+status+"', '"+article+"', '"+resons_solve+"', '"+date_of_decision+"');");
+        db.execSQL("INSERT INTO 'case' VALUES ('"+id+"', '"+number+"', '"+number_input_document+"', '"+register_date+"', '"+date_hearing_first_instance+"', '"+date_of_appellate_instance+"', '"+result_hearing+"', '"+number_in_next_instance+"', '"+number_in_last_instance+"', '"+judge+"', '"+category+"', '"+status+"', '"+article+"', '"+resons_solve+"', '"+date_of_decision+"');");
         for(int i=0; i< participants.size(); i+=2) {
             Log.d("D__", "внутри цикла участников");
             db.execSQL("INSERT INTO 'participants'  VALUES ('"+ id +"', '"+ participants.get(i)+"', '"+participants.get(i+1)+"'); ");
@@ -101,7 +101,7 @@ public class DataBase {
 
     public void createTable() {
         Log.d("D__", "CREATED");
-        db.execSQL("CREATE TABLE if not exists 'case' ('id' text, 'number' text, 'number_input_document' text, 'register_date' text, 'date_hearing_first_instance' text, 'date_of_appellate_instance' text, 'result_hearing' text, 'number_in_next_instance' text, 'url_number_in_next_instance' text,'number_in_last_instance' text, 'url_number_in_last_instance' text, 'judge' text, 'category' text, 'status' text, 'article' text, 'resons_solve' text, 'date_of_decision' text);");
+        db.execSQL("CREATE TABLE if not exists 'case' ('id' text, 'number' text, 'number_input_document' text, 'register_date' text, 'date_hearing_first_instance' text, 'date_of_appellate_instance' text, 'result_hearing' text, 'number_in_next_instance' text, 'number_in_last_instance' text,  'judge' text, 'category' text, 'status' text, 'article' text, 'resons_solve' text, 'date_of_decision' text);");
         Log.d("D__", "SDFSDF");
 
         db.execSQL("CREATE TABLE if not exists 'participants' ('id' text, 'type' text, 'name' text);");

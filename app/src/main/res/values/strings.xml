@@ -9,4 +9,6 @@
     <string name="unique_court_case">например, 77OS0000-05-2018-008038-16</string>
     <string name="number_of_court_case">например, 02-1234/2018</string>
     <string name="court_competitors">Фамилия И.О. или наименование орг.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
