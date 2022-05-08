@@ -1,6 +1,7 @@
 package com.example.courts;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,11 @@ public class ShortInfoAdapterJson extends BaseAdapter {
         String type_second_slide = "";
         String name_second_slide = "";
         String number = "";
+        try {
+            Log.d("JSON", String.valueOf(cases.getJSONObject(i)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         String status = "";
         try {
             number = cases.getJSONObject(i).getString("number");

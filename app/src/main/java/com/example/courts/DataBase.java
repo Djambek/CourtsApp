@@ -30,19 +30,21 @@ public class DataBase {
         createTable();
     }
 
-    void addNewCase(String id, String number, String number_input_document, ArrayList<ArrayList<String>> participants,
+    void addNewCase(String id, String number, String number_input_document, ArrayList<String> participants,
                     String register_date, String date_hearing_first_instance, String date_of_appellate_instance,
                     String result_hearing, String number_in_next_instance, String url_number_in_next_instance, String number_in_last_instance, String url_number_in_last_instance,
                     String judge, String category, String status, String article,
                     String resons_solve, String date_of_decision) {
         db.execSQL("INSERT INTO 'case' VALUES ('"+id+"', '"+number+"', '"+number_input_document+"', '"+register_date+"', '"+date_hearing_first_instance+"', '"+date_of_appellate_instance+"', '"+result_hearing+"', '"+number_in_next_instance+"', '"+url_number_in_next_instance+"', '"+number_in_last_instance+"', '"+url_number_in_last_instance+"', '"+judge+"', '"+category+"', '"+status+"', '"+article+"', '"+resons_solve+"', '"+date_of_decision+"');");
-        for(int i=0; i< participants.size(); i++) {
+        for(int i=0; i< participants.size(); i+=2) {
             Log.d("D__", "внутри цикла участников");
-            db.execSQL("INSERT INTO 'participants'  VALUES ('"+ id +"', '"+ participants.get(i).get(0)+"', '"+participants.get(i).get(1)+"'); ");
+            db.execSQL("INSERT INTO 'participants'  VALUES ('"+ id +"', '"+ participants.get(i)+"', '"+participants.get(i+1)+"'); ");
         }
         Log.d("D__", "Ну вроде как добавили");
 
     }
+
+
     public boolean exist(String id){
         Cursor cursor = db.rawQuery("SELECT id FROM 'case' WHERE id='"+id+"';", null);
         return cursor.moveToFirst();
@@ -69,8 +71,8 @@ public class DataBase {
         cursor.moveToFirst();
         Log.d("D__", cursor.getString(cursor.getColumnIndexOrThrow("number")));
         String number = cursor.getString(cursor.getColumnIndexOrThrow("number"));
-        String status = cursor.getString(cursor.getColumnIndexOrThrow("status"));
-        cursor = db.rawQuery("SELECT type, name FROM 'participants' WHERE id='" + id + "' LIMIT 1;", null);
+
+        cursor = db.rawQuery("SELECT type, name FROM 'participants' WHERE id='" + id + "';", null);
         boolean hasMoreData = cursor.moveToFirst();
         info.add(number);
         boolean has_parts = false;
@@ -82,9 +84,11 @@ public class DataBase {
             has_parts = true;
         }
         if (!has_parts){
-            info.add(new ArrayList<String>());
+            info.add(new ArrayList<String>(Arrays.asList("", "")));
+            info.add(new ArrayList<String>(Arrays.asList("", "")));
         }
-        info.add(status);
+        if (info.size() < 3){info.add(new ArrayList<String>(Arrays.asList("", "")));}
+        Log.d("info", String.valueOf(info));
         return info;
     }
     public void close(){

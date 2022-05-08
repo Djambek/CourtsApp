@@ -47,13 +47,13 @@ public class SearchResultFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Toast.makeText(getContext(), "Загрузка...", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(SearchResult.this, SearchResult.class);
-//                    try {
-//                        intent.putExtra("link", result_array.getJSONObject(i).getString("url"));
-//                    } catch (JSONException e) {
-//                        Log.e("ERROR", e.toString());
-//                    }
-//                    startActivity(intent);
+                    Intent intent = new Intent(getContext(), CourtCase.class);
+                    try {
+                       intent.putExtra("link", result_array.getJSONObject(i).getString("url"));
+                    } catch (JSONException e) {
+                        Log.e("ERROR", e.toString());
+                    }
+                    startActivity(intent);
                 }
             });
 

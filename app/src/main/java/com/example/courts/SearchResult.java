@@ -114,7 +114,6 @@ public class SearchResult extends AppCompatActivity {
         );
 
 
-        Integer finalMax_page1 = max_page;
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
