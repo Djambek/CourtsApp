@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -98,9 +99,16 @@ public class CourtCase extends AppCompatActivity {
 
         for(int i=0; i<args.length; i++){
             try {
-                if (!jsonObject.getString(args[i]).equals("")){ for_listview.add(names[i]+": "+jsonObject.getString(args[i])); }
-                else{ for_listview.add(""); }
-                for_db.add(jsonObject.getString(args[i]));
+                if (!jsonObject.getString(args[i]).equals("")){
+                    for_listview.add(names[i]+": ");
+                    for_listview.add(jsonObject.getString(args[i]));
+                    for_db.add(jsonObject.getString(args[i]));
+                }else{
+                    for_listview.add("");
+                    for_listview.add("");
+                    for_db.add("null");
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -111,13 +119,75 @@ public class CourtCase extends AppCompatActivity {
                 String type = parts.getJSONObject(i).getString("type");
                 String name = parts.getJSONObject(i).getString("name");
                 part_list.add(new ArrayList<>(Arrays.asList(type, name)));
-                for_listview.add(3, type+name);
+                for_listview.add(6, type + ": ");
+                for_listview.add(7, name);
+            }
+        } catch (JSONException e) {
+            part_list.add(new ArrayList<>(Arrays.asList("", "")));
+            e.printStackTrace();
+        }
+
+        // парсим истоторию состояний
+        ArrayList<String> history = new ArrayList<>();
+        try {
+            JSONArray history_json = jsonObject.getJSONArray("history");
+            for(int i=0; i<history_json.length(); i++){
+                String date = history_json.getJSONObject(i).getString("date");
+                history.add(date);
+                String status = history_json.getJSONObject(i).getString("status");
+                history.add(status);
+                String document = history_json.getJSONObject(i).getString("document");
+                history.add(document);
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            for_listview.add(3, "");
-            part_list.add(new ArrayList<>(Arrays.asList("", "")));
         }
+
+        // парсим историю местонахождений
+        ArrayList<String> history_place = new ArrayList<>();
+        try {
+            JSONArray history_place_json = jsonObject.getJSONArray("places_history");
+            for (int i = 0; i < history_place_json.length(); i++) {
+                history_place.add(history_place_json.getJSONObject(i).getString("date"));
+                history_place.add(history_place_json.getJSONObject(i).getString("place"));
+                history_place.add(history_place_json.getJSONObject(i).getString("comment"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // парсим судебные заседания и и беседы
+        ArrayList<String> sessions = new ArrayList<>();
+        try {
+            JSONArray sessions_json = jsonObject.getJSONArray("sessions");
+            for (int i = 0; i < sessions_json.length(); i++) {
+                sessions.add(sessions_json.getJSONObject(i).getString("date"));
+                sessions.add(sessions_json.getJSONObject(i).getString("hall"));
+                sessions.add(sessions_json.getJSONObject(i).getString("stage"));
+                sessions.add(sessions_json.getJSONObject(i).getString("result"));
+                sessions.add(sessions_json.getJSONObject(i).getString("reson"));
+                sessions.add(sessions_json.getJSONObject(i).getString("video"));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // парсим судебные акты
+        ArrayList<String> documents = new ArrayList<>();
+        try {
+            JSONArray documents_json = jsonObject.getJSONArray("documents");
+            for (int i = 0; i < documents_json.length(); i++) {
+                documents.add(documents_json.getJSONObject(i).getString("date"));
+                documents.add(documents_json.getJSONObject(i).getString("kind_document"));
+                documents.add(documents_json.getJSONObject(i).getString("document_text"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         Log.d("Court+", "---------");
         Log.d("Court+", String.valueOf(for_db));
         Log.d("Court+", String.valueOf(for_db.size()));
@@ -140,95 +210,39 @@ public class CourtCase extends AppCompatActivity {
 
 
         ExtraCaseInfoFragment extraCaseInfoFragment = new ExtraCaseInfoFragment();
+        Bundle args_extra = new Bundle();
+        Log.d("History", String.valueOf(history));
+        args_extra.putStringArrayList("history", history);
+        args_extra.putStringArrayList("history_place", history_place);
+        args_extra.putStringArrayList("sessions", sessions);
+        args_extra.putStringArrayList("documents", documents);
+        extraCaseInfoFragment.setArguments(args_extra);
         view_adapter.addFragment(extraCaseInfoFragment, "Дополнительное");
+
 
         viewPager.setAdapter(view_adapter);
 
+        Button save = findViewById(R.id.button_add_new_case);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DataBase db = new DataBase(getApplicationContext());
+                if (!db.exist(for_db.get(0))){
+                    db.addNewCase(for_db.get(0), for_db.get(1), for_db.get(2), for_db.get(3), for_db.get(4), for_db.get(5),
+                            for_db.get(6), for_db.get(7), for_db.get(8), for_db.get(9),
+                            for_db.get(10), for_db.get(11), for_db.get(12), for_db.get(13), for_db.get(14), part_list);
+                    db.close();
+                    Intent intent = new Intent(CourtCase.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
 
-//        ArrayList<ArrayList<Object>> case_info = new ArrayList<>();
-//
-//        for (int i = 0; i < args.length; i++) {
-//            try {
-//                Log.d("ARGS", args[i]);
-//                ArrayList<Object> tmp = new ArrayList<>();
-//                if (args[i].equals("participants")) {
-//
-//                    JSONArray parts = jsonObject.getJSONArray("participants");
-//                    Log.d("RESULT", String.valueOf(parts));
-//                    ArrayList<String> my_tmp = new ArrayList<>(); // надо, чтобы были в одном списке ответчик и истец
-//                    for (int j = 0; j < parts.length(); j++) {
-//                        Log.d("RESULT", "Зашли в цикл участников");
-//                        tmp.add(parts.getJSONObject(j).getString("type"));
-//                        part_db_info.add(parts.getJSONObject(j).getString("type"));
-//                        tmp.add(parts.getJSONObject(j).getString("name"));
-//                        part_db_info.add(parts.getJSONObject(j).getString("name"));
-//                        tmp.add(null);
-//                        case_info.add(tmp);
-//                        tmp = new ArrayList<>();
-//                    }
-//                    if (parts.length() == 0){
-//                        part_db_info.add(""); // чисто само потом поменяется
-//                    }
-//
-//                } else {
-//                    if (args[i].equals("number_in_last_instance")) {
-//                        tmp.add(names[i] + ": ");
-//                        if (!jsonObject.getString(args[i]).equals("")){
-//                            add_case_db_info.add(jsonObject.getString(args[i]));
-//                        }else{
-//                            add_case_db_info.add("null");
-//                        }
-//                        tmp.add(jsonObject.getString(args[i]));
-//
-//                        if (!jsonObject.getString("url_number_in_last_instance").equals("")) {
-//                            tmp.add(jsonObject.getString("url_number_in_last_instance"));
-//                            add_case_db_info.add(jsonObject.getString("url_number_in_last_instance"));
-//                        }else{
-//                            add_case_db_info.add("null");
-//                        }
-//                        tmp.add(null); //Цвет
-//                    } else {
-//                        if (args[i].equals("number_in_next_instance")) {
-//                            tmp.add(names[i] + ": ");
-//                            if (!jsonObject.getString(args[i]).equals("")) {
-//                                add_case_db_info.add(jsonObject.getString(args[i]));
-//                            }
-//                            else{
-//                                add_case_db_info.add("null");
-//                            }
-//                            tmp.add(jsonObject.getString(args[i]));
-//                            if (!jsonObject.getString("url_number_in_next_instance").equals("")) {
-//                                add_case_db_info.add(jsonObject.getString("url_number_in_next_instance"));
-//                                tmp.add(jsonObject.getString("url_number_in_next_instance"));
-//                            }else{
-//                                add_case_db_info.add("null");
-//                            }
-//                            tmp.add(null); //Цвет
-//                        } else {
-//                            tmp.add(names[i] + ": ");
-//                            tmp.add(jsonObject.getString(args[i]));
-//                            if (jsonObject.getString(args[i]).equals("")){
-//                                add_case_db_info.add("null");
-//                            }else {
-//                                add_case_db_info.add(jsonObject.getString(args[i]));
-//                            }
-//                            tmp.add(null); // Цвет, тут он должен быть прозрачным
-//
-//                        }
-//                    }
-//                }
-//                if(tmp.size() > 2 && !tmp.get(0).equals("") && !tmp.get(1).equals("")) {
-//                    case_info.add(tmp);
-//                }
-//                tmp = new ArrayList<>();
-//
-//            } catch (JSONException e) {
-//                Log.e("JSON ERROR", e.getMessage());
-//            }
-//        }
-//        Log.d("RESULT", String.valueOf(add_case_db_info));
-//        Log.d("RESULT", String.valueOf(add_case_db_info.size()));
-//        Log.d("PARTS", String.valueOf(part_db_info));
+                }else{
+                    Toast.makeText(getApplicationContext(), "Это дело уже добавлено.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
 
 

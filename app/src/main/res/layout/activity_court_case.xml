@@ -40,14 +40,14 @@
         android:id="@+id/viewpage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_city_selection_confirmation"
+        app:layout_constraintBottom_toTopOf="@+id/button_add_new_case"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tablayout" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_city_selection_confirmation"
+        android:id="@+id/button_add_new_case"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="152dp"
         android:layout_height="52dp"

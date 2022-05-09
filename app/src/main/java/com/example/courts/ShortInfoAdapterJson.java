@@ -63,10 +63,10 @@ public class ShortInfoAdapterJson extends BaseAdapter {
 
             JSONArray part = cases.getJSONObject(i).getJSONArray("participants");
             if (part.length() > 0){
-                type_first_slide = part.getJSONObject(0).getString("type");
+                type_first_slide = part.getJSONObject(0).getString("type")+": ";
                 name_first_slide = part.getJSONObject(0).getString("name");
                 if (part.length() == 2) {
-                    type_second_slide = part.getJSONObject(1).getString("type");
+                    type_second_slide = part.getJSONObject(1).getString("type")+": ";
                     name_second_slide = part.getJSONObject(1).getString("name");
                 }
             }

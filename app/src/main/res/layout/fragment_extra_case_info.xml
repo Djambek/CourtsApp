@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
     android:layout_height="match_parent"
     tools:context=".ExtraCaseInfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Тута будут всякие таблички" />
+        android:textSize="25sp"
+        android:layout_height="wrap_content"
+        android:text="История состояний" />
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listview_history"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="25sp"
+        android:layout_height="wrap_content"
+        android:text="История местонахождения" />
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listview_places_history"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="25sp"
+        android:layout_height="wrap_content"
+        android:text="Судебные заседания и беседы" />
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listview_sessions"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="25sp"
+        android:layout_height="wrap_content"
+        android:text="Судебные акты" />
+    <ListView
+        android:layout_width="match_parent"
+        android:id="@+id/listview_documents"
+        android:layout_height="wrap_content"/>
 
-</FrameLayout>
+
+
+
+</LinearLayout>

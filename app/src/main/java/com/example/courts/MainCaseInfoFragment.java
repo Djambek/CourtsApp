@@ -13,6 +13,7 @@ import android.widget.ListView;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainCaseInfoFragment extends Fragment {
 
@@ -21,11 +22,20 @@ public class MainCaseInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_case_info, container, false);
-        ArrayList<String> info_listview = getArguments().getStringArrayList("info");
+        ArrayList<String> info = getArguments().getStringArrayList("info");
+        ArrayList<ArrayList<String>> info_listview = new ArrayList<>();
+        for (int i = 0; i < info.size(); i+=2) {
+            if (!info.get(i).equals("") && !info.get(i+1).equals("")) {
+                info_listview.add(new ArrayList<>(Arrays.asList(info.get(i), info.get(i + 1))));
+            }
+        }
+
+
 
         ListView listView = view.findViewById(R.id.listview);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, info_listview);
-        listView.setAdapter(adapter);
+        listView.setAdapter(new Court_info_adapter(getContext(), info_listview));
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, info_listview);
+        //listView.setAdapter(adapter);
 
 
         return view;

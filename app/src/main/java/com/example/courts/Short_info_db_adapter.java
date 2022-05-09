@@ -49,7 +49,7 @@ public class Short_info_db_adapter extends BaseAdapter {
         text_plain.setText(plain.get(0) + plain.get(1));
 
         TextView text_def = my_view.findViewById(R.id.text_spinner_defendant);
-        text_def.setText(def.get(0) + def.get(1));
+        text_def.setText(def.get(0)+ def.get(1));
 
         return my_view;
     }

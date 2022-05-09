@@ -3,6 +3,7 @@ package com.example.courts;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Log;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 
 public class Court_info_adapter extends BaseAdapter {
     Context context;
-    ArrayList<ArrayList<Object>> case_info;
-    Court_info_adapter(Context context, ArrayList<ArrayList<Object>> case_info){
+    ArrayList<ArrayList<String>> case_info;
+    Court_info_adapter(Context context, ArrayList<ArrayList<String>> case_info){
         this.context = context;
         this.case_info = case_info;
     }
@@ -42,25 +43,27 @@ public class Court_info_adapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View my_view = LayoutInflater.from(context).inflate(R.layout.court_info_adapter_view, null);
         TextView tw = my_view.findViewById(R.id.textview_adapet_case_info);
-        ArrayList<Object> i_case = case_info.get(i);
-        if (i_case.size() == 4){
-            tw.setText(Html.fromHtml("<font><b>" + i_case.get(0) + ": " + "</b></font>" + "<font color='#0066FF'>" + i_case.get(1) + "</font>"));
-            tw.setBackground((Drawable) i_case.get(3));
-            tw.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, CourtCase.class);
-                    Log.d("SEARCH_IN_ADAPTER", String.valueOf(i_case));
-                    Toast.makeText(context, "Загрузка...", Toast.LENGTH_SHORT).show();
-                    intent.putExtra("link", String.valueOf(i_case.get(2)));
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                }
-            });
-        }else{
-            tw.setText(Html.fromHtml("<font><b>" + i_case.get(0)  + "</b></font>" + i_case.get(1)));
-            tw.setBackground((Drawable) i_case.get(2));
-        }
+        ArrayList<String> i_case = case_info.get(i);
+        tw.setText(Html.fromHtml("<font><b>" + i_case.get(0)  + "</b></font>" + i_case.get(1)));
+        if(i_case.size() > 2){tw.setBackground(null);}
+//        if (i_case.size() == 4){
+//            tw.setText(Html.fromHtml("<font><b>" + i_case.get(0) + ": " + "</b></font>" + "<font color='#0066FF'>" + i_case.get(1) + "</font>"));
+//            tw.setBackground((Drawable) i_case.get(3));
+//            tw.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent intent = new Intent(context, CourtCase.class);
+//                    Log.d("SEARCH_IN_ADAPTER", String.valueOf(i_case));
+//                    Toast.makeText(context, "Загрузка...", Toast.LENGTH_SHORT).show();
+//                    intent.putExtra("link", String.valueOf(i_case.get(2)));
+//                    context.startActivity(intent);
+//                    ((Activity)context).finish();
+//                }
+//            });
+//        }else{
+//            tw.setText(Html.fromHtml("<font><b>" + i_case.get(0)  + "</b></font>" + i_case.get(1)));
+//            tw.setBackground((Drawable) i_case.get(2));
+//        }
 
         return my_view;
     }
