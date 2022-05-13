@@ -3,50 +3,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_marginLeft="10dp"
+    android:layout_marginLeft="20dp"
     android:layout_height="match_parent"
     tools:context=".ExtraCaseInfoFragment">
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:textSize="25sp"
+        android:id="@+id/text_history_status"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/linlay_history"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:layout_width="match_parent"
         android:textSize="25sp"
-        android:layout_height="wrap_content"
-        android:text="История состояний" />
-    <ListView
+        android:id="@+id/text_history_place"
+        android:layout_height="wrap_content" />
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/listview_history"
+        android:id="@+id/linlay_history_places"
+        android:orientation="vertical"
         android:layout_height="wrap_content"/>
     <TextView
         android:layout_width="match_parent"
         android:textSize="25sp"
-        android:layout_height="wrap_content"
-        android:text="История местонахождения" />
-    <ListView
+        android:id="@+id/text_sessions"
+        android:layout_height="wrap_content" />
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/listview_places_history"
+        android:id="@+id/linlay_sessions"
+        android:orientation="vertical"
         android:layout_height="wrap_content"/>
     <TextView
         android:layout_width="match_parent"
         android:textSize="25sp"
-        android:layout_height="wrap_content"
-        android:text="Судебные заседания и беседы" />
-    <ListView
+        android:id="@+id/document_text"
+        android:layout_height="wrap_content" />
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/listview_sessions"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:textSize="25sp"
-        android:layout_height="wrap_content"
-        android:text="Судебные акты" />
-    <ListView
-        android:layout_width="match_parent"
-        android:id="@+id/listview_documents"
+        android:id="@+id/linlay_documents"
+        android:orientation="vertical"
         android:layout_height="wrap_content"/>
 
 
-
+</LinearLayout>
+</ScrollView>
 
 </LinearLayout>

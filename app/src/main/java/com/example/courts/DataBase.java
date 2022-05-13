@@ -44,6 +44,57 @@ public class DataBase {
 
     }
 
+    void addHistory(String id, ArrayList<String> args){
+        for (int i = 0; i < args.size() / 3; i++) {
+            //Log.d("info", String.valueOf(new ArrayList<String>(Arrays.asList(id, args.get(i*3), args.get(i*3+1), args.get(i*3+2)))));
+            for (int j = 0; j < 3; j++) {
+                if (args.get(i*3+j).equals("")){
+                    args.set(i*3+j, null);
+                }
+            }
+            String query = String.format("INSERT INTO 'history' VALUES ('%s', '%s', '%s', '%s')", id, args.get(i*3), args.get(i*3+1),
+                    args.get(i*3+2));
+            db.execSQL(query);
+        }
+
+    }
+    void addPlaceHistory(String id, ArrayList<String> args){
+        for (int i = 0; i < args.size() / 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (args.get(i*3+j).equals("")){
+                    args.set(i*3+j, null);
+                }
+            }
+            String query = String.format("INSERT INTO 'places_history' VALUES ('%s', '%s', '%s', '%s')", id, args.get(i*3), args.get(i*3+1),
+                    args.get(i*3+2));
+            db.execSQL(query);
+        }
+    }
+    void addSessions(String id, ArrayList<String> args){
+        for (int i = 0; i < args.size() / 6; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (args.get(i*3+j).equals("")){
+                    args.set(i*3+j, null);
+                }
+            }
+            String query = String.format("INSERT INTO 'sessions' VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')", id, args.get(i*3), args.get(i*3+1),
+                    args.get(i*3+2), args.get(i*3+3), args.get(i*3+4), args.get(i*3+5));
+            db.execSQL(query);
+        }
+    }
+    void addDocuments(String id, ArrayList<String> args){
+        for (int i = 0; i < args.size() / 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (args.get(i*3+j).equals("")){
+                    args.set(i*3+j, null);
+                }
+            }
+            String query = String.format("INSERT INTO 'documents' VALUES ('%s', '%s', '%s', '%s')", id, args.get(i*3), args.get(i*3+1),
+                    args.get(i*3+2));
+            db.execSQL(query);
+        }
+    }
+
 
     public boolean exist(String id){
         Cursor cursor = db.rawQuery("SELECT id FROM 'case' WHERE id='"+id+"';", null);

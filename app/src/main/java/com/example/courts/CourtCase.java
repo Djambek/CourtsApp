@@ -213,7 +213,9 @@ public class CourtCase extends AppCompatActivity {
         Bundle args_extra = new Bundle();
         Log.d("History", String.valueOf(history));
         args_extra.putStringArrayList("history", history);
+        Log.d("History_place", String.valueOf(history_place));
         args_extra.putStringArrayList("history_place", history_place);
+        Log.d("Sessions", String.valueOf(sessions));
         args_extra.putStringArrayList("sessions", sessions);
         args_extra.putStringArrayList("documents", documents);
         extraCaseInfoFragment.setArguments(args_extra);
@@ -231,6 +233,12 @@ public class CourtCase extends AppCompatActivity {
                     db.addNewCase(for_db.get(0), for_db.get(1), for_db.get(2), for_db.get(3), for_db.get(4), for_db.get(5),
                             for_db.get(6), for_db.get(7), for_db.get(8), for_db.get(9),
                             for_db.get(10), for_db.get(11), for_db.get(12), for_db.get(13), for_db.get(14), part_list);
+
+                    db.addHistory(for_db.get(0), history);
+                    db.addPlaceHistory(for_db.get(0), history_place);
+                    db.addDocuments(for_db.get(0), documents);
+                    db.addSessions(for_db.get(0), sessions);
+
                     db.close();
                     Intent intent = new Intent(CourtCase.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
