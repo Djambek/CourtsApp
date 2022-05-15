@@ -54,7 +54,7 @@ public class CourtCase extends AppCompatActivity {
             public void run() {
                 super.run();
                 try {
-                    Document res = Jsoup.connect(link).ignoreContentType(true).get();
+                    Document res = Jsoup.connect(link).maxBodySize(0).ignoreContentType(true).get();
                     jsonObject = new JSONObject(res.text());
 
                 } catch (IOException | JSONException e) {
@@ -221,7 +221,8 @@ public class CourtCase extends AppCompatActivity {
                 if (!db.exist(for_db.get(0))){
                     db.addNewCase(for_db.get(0), for_db.get(1), for_db.get(2), for_db.get(3), for_db.get(4), for_db.get(5),
                             for_db.get(6), for_db.get(7), for_db.get(8), for_db.get(9),
-                            for_db.get(10), for_db.get(11), for_db.get(12), for_db.get(13), for_db.get(14), part_list);
+                            for_db.get(10), for_db.get(11), for_db.get(12), for_db.get(13),
+                            for_db.get(14), arguments.getString("link"), part_list);
 
                     db.addHistory(for_db.get(0), history);
                     db.addPlaceHistory(for_db.get(0), history_place);

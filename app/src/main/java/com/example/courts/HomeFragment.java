@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
         for (String id : ids){
             Log.d("__Info", String.valueOf(db.getShortInfo(id)));
         }
+
         Log.d("IDS", String.valueOf(ids));
         listview.setAdapter(new Short_info_db_adapter(getContext(), ids));
 
@@ -44,6 +45,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         db = new DataBase(getContext());
         ids = db.get_all_id();
+        CheckCase checkCase = new CheckCase();
+        checkCase.checkUpdate(getContext(), ids.get(0));
 
         listview = view.findViewById(R.id.listview);
         Log.d("_ID", String.valueOf(ids));

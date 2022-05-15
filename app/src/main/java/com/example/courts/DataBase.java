@@ -34,8 +34,13 @@ public class DataBase {
                     String register_date, String date_hearing_first_instance, String date_of_appellate_instance,
                     String result_hearing, String number_in_next_instance,  String number_in_last_instance,
                     String judge, String category, String status, String article,
-                    String resons_solve, String date_of_decision, ArrayList<ArrayList<String>> participants) {
-        db.execSQL("INSERT INTO 'case' VALUES ('"+id+"', '"+number+"', '"+number_input_document+"', '"+register_date+"', '"+date_hearing_first_instance+"', '"+date_of_appellate_instance+"', '"+result_hearing+"', '"+number_in_next_instance+"', '"+number_in_last_instance+"', '"+judge+"', '"+category+"', '"+status+"', '"+article+"', '"+resons_solve+"', '"+date_of_decision+"');");
+                    String reasons_solve, String date_of_decision, String link, ArrayList<ArrayList<String>> participants) {
+        String query = String.format("INSERT INTO 'case' VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", 
+                id, number, number_input_document, register_date, date_hearing_first_instance,
+                date_of_appellate_instance, result_hearing, number_in_next_instance,
+                number_in_last_instance, judge, category, status, article, reasons_solve,
+                date_of_decision, link);
+        db.execSQL(query);
         for(int i=0; i< participants.size(); i++) {
             Log.d("D__", "внутри цикла участников");
             db.execSQL("INSERT INTO 'participants'  VALUES ('"+ id +"', '"+ participants.get(i).get(0)+"', '"+participants.get(i).get(1)+"'); ");
@@ -173,13 +178,19 @@ public class DataBase {
         }
         return places_history;
     }
+    public String getLink(String id){
+        String query = String.format("SELECT link  FROM 'case' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        return cursor.getString(cursor.getColumnIndexOrThrow("link"));
+    }
 
     public ArrayList<String> getSessions(String id){
-        String query = String.format("SELECT date, hall, stage, result, reson, video  FROM 'sessions' WHERE id='%s'", id);
+        String query = String.format("SELECT date, hall, stage, result, reason, video  FROM 'sessions' WHERE id='%s'", id);
         Cursor cursor = db.rawQuery(query, null);
         ArrayList<String> sessions = new ArrayList<>();
         boolean hasMoreData = cursor.moveToFirst();
-        String[] columns = new String[]{"date", "hall", "stage", "result", "reson", "video"};
+        String[] columns = new String[]{"date", "hall", "stage", "result", "reason", "video"};
         while (hasMoreData){
             for (String column :
                     columns) {
@@ -197,7 +208,7 @@ public class DataBase {
         String[] columns = new String[]{"id", "number", "number_input_document", "register_date",
                 "date_hearing_first_instance", "date_of_appellate_instance", "result_hearing", "number_in_next_instance",
                 "number_in_last_instance",  "judge", "category",
-                "status", "article", "resons_solve", "date_of_decision"};
+                "status", "article", "reasons_solve", "date_of_decision"};
         String[] phrase = new String[]{"Уникальный индификатор дела", "Номер дела", "Номер входящего документа",
                 "Дата регистрации", "Дата рассмотрения дела в первой инстанции",
                 "Дата поступления дела в апелляционную инстанцию", "Результат рассмотрения", "Номер дела в суде вышестоящей инстанции",
@@ -260,12 +271,17 @@ public class DataBase {
 
     public void createTable() {
         Log.d("D__", "CREATED");
-        db.execSQL("CREATE TABLE if not exists 'case' ('id' text, 'number' text, 'number_input_document' text, 'register_date' text, 'date_hearing_first_instance' text, 'date_of_appellate_instance' text, 'result_hearing' text, 'number_in_next_instance' text, 'number_in_last_instance' text,  'judge' text, 'category' text, 'status' text, 'article' text, 'resons_solve' text, 'date_of_decision' text);");
+        db.execSQL("CREATE TABLE if not exists 'case' ('id' text, 'number' text, 'number_input_document' text, 'register_date' text, " +
+                "'date_hearing_first_instance' text, 'date_of_appellate_instance' text, " +
+                "'result_hearing' text, 'number_in_next_instance' text, 'number_in_last_instance' text," +
+                " 'judge' text, 'category' text, " +
+                "'status' text, 'article' text, 'reasons_solve' text, " +
+                "'date_of_decision' text, 'link' text);");
         Log.d("D__", "SDFSDF");
 
         db.execSQL("CREATE TABLE if not exists 'participants' ('id' text, 'type' text, 'name' text);");
         db.execSQL("CREATE TABLE if not exists 'places_history' ('id' text, 'date' text, 'place' text, 'comment' text);");
-        db.execSQL("CREATE TABLE if not exists 'sessions' ('id' text, 'date' text, 'hall' text, 'stage' text, 'result' text, 'reson' text, 'video' text);");
+        db.execSQL("CREATE TABLE if not exists 'sessions' ('id' text, 'date' text, 'hall' text, 'stage' text, 'result' text, 'reason' text, 'video' text);");
         db.execSQL("CREATE TABLE if not exists 'history' ('id' text, 'date' text, 'status' text, 'document' text);");
         db.execSQL("CREATE TABLE if not exists 'documents' ('id' text, 'date' text, 'kind_document' text, 'document_text' text);");
     }

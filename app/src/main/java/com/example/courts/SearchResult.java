@@ -106,8 +106,10 @@ public class SearchResult extends AppCompatActivity {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.fragment_container, sr_fragment).commit();
                         textView.setText(page_now+" из "+ max_page);
-                        if (page_now != 1){last.setVisibility(View.VISIBLE);}
+                        if (page_now > 1){last.setVisibility(View.VISIBLE);}
+                        else{last.setVisibility(View.INVISIBLE);}
                         if (page_now != max_page){next.setVisibility(View.VISIBLE);}
+                        else{next.setVisibility(View.INVISIBLE);}
 
                     }
                 }
@@ -128,8 +130,10 @@ public class SearchResult extends AppCompatActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_container, sr_fragment).commit();
                 textView.setText(page_now+" из "+ max_page);
-                if (page_now != 1){last.setVisibility(View.VISIBLE);}
+                if (page_now > 1){last.setVisibility(View.VISIBLE);}
+                else{last.setVisibility(View.INVISIBLE);}
                 if (page_now != max_page){next.setVisibility(View.VISIBLE);}
+                else{next.setVisibility(View.INVISIBLE);}
             }
         });
 
@@ -166,7 +170,8 @@ public class SearchResult extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    res[0] = Jsoup.connect(link).ignoreContentType(true).get();
+                    res[0] = Jsoup.connect(link).maxBodySize(50000000)
+                            .ignoreContentType(true).get();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("ERROR", e.toString());

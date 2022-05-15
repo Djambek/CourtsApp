@@ -8,14 +8,21 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Calendar;
 
 import io.paperdb.Paper;
 
@@ -75,6 +82,40 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+
+
+//        Intent intent_alarm = new Intent(this, CheckCase.class);
+//        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent_alarm, 0);
+//
+//        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+//                100, alarmIntent);
+        Runnable mToastRunnable;
+        Handler mHandler = new Handler();
+
+
+
+
+        //create runnable for delay
+//        mToastRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(MainActivity.this, "This is a delayed toast", Toast.LENGTH_SHORT).show();
+//                Log.d("RUN", "ran");
+//                mHandler.postDelayed(this, 2000);
+//            }
+//        };
+//        mToastRunnable.run();
+
+
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, 12);
+//        calendar.set(Calendar.MINUTE, 38);
+
+
+
         }
 
 //    @Override
