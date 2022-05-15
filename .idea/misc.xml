@@ -6,11 +6,13 @@
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/drawable/ic_plus.xml" value="0.1915" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_case_info.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_court_case.xml" value="0.25" />
+        <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_court_case_db.xml" value="0.1625" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_first_run.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_main.xml" value="0.20625" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_search.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/activity_search_result.xml" value="0.22" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/court_info_adapter_view.xml" value="0.25" />
+        <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/fragment_court_case_d_b.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/fragment_extra_case_info.xml" value="0.18" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/fragment_info.xml" value="0.25" />
@@ -23,6 +25,7 @@
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/short_info_db_adapterview.xml" value="0.10833333333333334" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/layout/shortinfo_adapterview.xml" value="0.25" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/menu/drawer_menu.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/menu/toolbar_courtcasedb_menu.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/Djambek/AndroidStudioProjects/Courts3/app/src/main/res/menu/toolbar_menu.xml" value="0.33" />
       </map>
     </option>

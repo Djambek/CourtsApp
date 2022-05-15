@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment(), "home").commit();
             nav_view.setCheckedItem(R.id.nav_home);
         }
 
@@ -58,14 +61,14 @@ public class MainActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment(), "home").commit();
                         break;
                     case R.id.nav_settings:
                         Log.d("EE", "Выбрал настройки");
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment(), "settings").commit();
                         break;
                     case R.id.nav_info:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InfoFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InfoFragment(), "about").commit();
                         break;
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -74,8 +77,17 @@ public class MainActivity extends AppCompatActivity{
         });
         }
 
-
-
+//    @Override
+//    protected void onRestart() {
+//        Log.d("RESTART", "рестартнули маин");
+//        // обновили фрагмент, где отображаются дела после рестарта активности
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        Fragment fr = getFragmentManager().findFragmentByTag("home");
+//        ft.detach(fr);
+//        ft.attach(fr);
+//        ft.commit();
+//        super.onRestart();
+//    }
 
     @Override
     public void onBackPressed() {

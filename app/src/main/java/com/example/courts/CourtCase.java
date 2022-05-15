@@ -70,18 +70,6 @@ public class CourtCase extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        String[] args = new String[]{"id", "number", "number_input_document", "participants",
-//                "register_date", "date_hearing_first_instance",
-//                "date_of_appellate_instance", "result_hearing", "number_in_next_instance", "number_in_last_instance", "judge", "category",
-//                "status", "article", "resons_solve", "date_of_decision"};
-//        String[] names = new String[]{"Уникальный индификатор дела", "Номер дела", "Номер входящего документа",
-//                "", "Дата регистрации", "Дата рассмотрения дела в первой инстанции",
-//                "Дата поступления дела в апелляционную инстанцию", "Результат рассмотрения", "Номер дела в суде вышестоящей инстанции",
-//                "Номер дела в суде нижестоящей инстанции",
-//                "Судья", "Категория дела", "Статус",
-//                "Статья", "Основание решения суда", "Дата вступления решения в силу"};
-
-
         String[] args = new String[]{"id", "number", "number_input_document",
                 "register_date", "date_hearing_first_instance",
                 "date_of_appellate_instance", "result_hearing", "number_in_next_instance", "number_in_last_instance", "judge", "category",
@@ -203,6 +191,7 @@ public class CourtCase extends AppCompatActivity {
         ViewPageAdapter view_adapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         Bundle args_main = new Bundle();
+        Log.d("INFO", String.valueOf(for_listview));
         args_main.putStringArrayList("info", for_listview);
         MainCaseInfoFragment mainCaseInfoFragment = new MainCaseInfoFragment();
         mainCaseInfoFragment.setArguments(args_main);
@@ -251,36 +240,6 @@ public class CourtCase extends AppCompatActivity {
 
             }
         });
-
-
-
-//        Button save = findViewById(R.id.buttonsaveinfo);
-//        save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DataBase dataBase = new DataBase(getApplicationContext());
-//                if (!dataBase.exist(add_case_db_info.get(0))){
-//                    dataBase.addNewCase(add_case_db_info.get(0), add_case_db_info.get(1), add_case_db_info.get(2), part_db_info,
-//                            add_case_db_info.get(3), add_case_db_info.get(4), add_case_db_info.get(5), add_case_db_info.get(6),
-//                            add_case_db_info.get(7), add_case_db_info.get(8), add_case_db_info.get(9),add_case_db_info.get(10),
-//                            add_case_db_info.get(11), add_case_db_info.get(12),add_case_db_info.get(13), add_case_db_info.get(14),
-//                            add_case_db_info.get(15), add_case_db_info.get(16));}
-//                else{
-//                    Log.d("IDS__", "Добавляем уже существуеющий");
-//                }
-//                Log.d("IDS___", String.valueOf(dataBase.get_all_id()));
-//                dataBase.close();
-//                Intent intent = new Intent(CourtCase.this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                finish();
-//
-//            }
-//        });
-
-//        ListView listView = findViewById(R.id.list_view_court_info);
-//        Log.d("MASSIVE", String.valueOf(case_info));
-//        listView.setAdapter(new Court_info_adapter(this, case_info));
 
     }
 }

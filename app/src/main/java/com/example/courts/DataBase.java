@@ -115,12 +115,9 @@ public class DataBase {
 
     public ArrayList<Object> getShortInfo(String id) {
         ArrayList<Object> info = new ArrayList<>();
-        String  query = "SELECT number, status FROM 'case' WHERE id='"+id+"'"+" LIMIT 1;";
-        Log.d("QUERY", query);
+        String  query = "SELECT number, status FROM 'case' WHERE id='"+id+"'";
         Cursor cursor = db.rawQuery(query, null);
-        Log.d("D__number_number_curson", String.valueOf(cursor.getColumnIndex("number")));
         cursor.moveToFirst();
-        Log.d("D__", cursor.getString(cursor.getColumnIndexOrThrow("number")));
         String number = cursor.getString(cursor.getColumnIndexOrThrow("number"));
 
         cursor = db.rawQuery("SELECT type, name FROM 'participants' WHERE id='" + id + "';", null);
@@ -142,6 +139,117 @@ public class DataBase {
         Log.d("info", String.valueOf(info));
         return info;
     }
+
+    public ArrayList<String> getHistory(String id) {
+        String query = String.format("SELECT date, status, document FROM 'history' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> history = new ArrayList<>();
+        boolean hasMoreData = cursor.moveToFirst();
+        String[] columns = new String[]{"date", "status", "document"};
+        while (hasMoreData){
+            for (String column :
+                    columns) {
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(column)).equals("null")? "":cursor.getString(cursor.getColumnIndexOrThrow(column));
+                history.add(res);
+            }
+            hasMoreData = cursor.moveToNext();
+        }
+        return history;
+    }
+
+    public ArrayList<String> getPlaceHistory(String id){
+        String query = String.format("SELECT date, place, comment FROM 'places_history' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> places_history = new ArrayList<>();
+        boolean hasMoreData = cursor.moveToFirst();
+        String[] columns = new String[]{"date", "place", "comment"};
+        while (hasMoreData){
+            for (String column :
+                    columns) {
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(column)).equals("null")? "":cursor.getString(cursor.getColumnIndexOrThrow(column));
+                places_history.add(res);
+            }
+            hasMoreData = cursor.moveToNext();
+        }
+        return places_history;
+    }
+
+    public ArrayList<String> getSessions(String id){
+        String query = String.format("SELECT date, hall, stage, result, reson, video  FROM 'sessions' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> sessions = new ArrayList<>();
+        boolean hasMoreData = cursor.moveToFirst();
+        String[] columns = new String[]{"date", "hall", "stage", "result", "reson", "video"};
+        while (hasMoreData){
+            for (String column :
+                    columns) {
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(column)).equals("null")? "":cursor.getString(cursor.getColumnIndexOrThrow(column));
+                sessions.add(res);
+            }
+            hasMoreData = cursor.moveToNext();
+        }
+        return sessions;
+    }
+    public ArrayList<String> getMainInfo(String id){
+        ArrayList<String> info = new ArrayList<>();
+        String query = String.format("SELECT * FROM 'case' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        String[] columns = new String[]{"id", "number", "number_input_document", "register_date",
+                "date_hearing_first_instance", "date_of_appellate_instance", "result_hearing", "number_in_next_instance",
+                "number_in_last_instance",  "judge", "category",
+                "status", "article", "resons_solve", "date_of_decision"};
+        String[] phrase = new String[]{"Уникальный индификатор дела", "Номер дела", "Номер входящего документа",
+                "Дата регистрации", "Дата рассмотрения дела в первой инстанции",
+                "Дата поступления дела в апелляционную инстанцию", "Результат рассмотрения", "Номер дела в суде вышестоящей инстанции",
+                "Номер дела в суде нижестоящей инстанции",
+                "Судья", "Категория дела", "Статус",
+                "Статья", "Основание решения суда", "Дата вступления решения в силу"};
+        boolean hasMoreDate = cursor.moveToFirst();
+        if (hasMoreDate){
+            for (int i = 0; i < columns.length; i++) {
+                info.add(phrase[i]+": ");
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(columns[i])).equals("null") ? "":cursor.getString(cursor.getColumnIndexOrThrow(columns[i]));
+                info.add(res);
+            }
+
+            query = String.format("SELECT type, name FROM 'participants' WHERE id='%s'", id);
+            cursor = db.rawQuery(query, null);
+            hasMoreDate = cursor.moveToFirst();
+            while(hasMoreDate){
+                info.add(6, cursor.getString(cursor.getColumnIndexOrThrow("type"))+": ");
+                info.add(7, cursor.getString(cursor.getColumnIndexOrThrow("name")));
+                hasMoreDate = cursor.moveToNext();
+            }
+
+            return info;
+        }
+        return null;
+    }
+    public void delete(String id){
+        db.execSQL(String.format("DELETE FROM 'case' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'history' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'places_history' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'sessions' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'documents' WHERE id='%s'", id));
+    }
+
+    public ArrayList<String> getDocument(String id){
+        String query = String.format("SELECT date, kind_document, document_text FROM 'documents' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<String> documents = new ArrayList<>();
+        boolean hasMoreData = cursor.moveToFirst();
+        String[] columns = new String[]{"date", "kind_document", "document_text"};
+        while (hasMoreData){
+            for (String column :
+                    columns) {
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(column)).equals("null")? "":cursor.getString(cursor.getColumnIndexOrThrow(column));
+                documents.add(res);
+            }
+            hasMoreData = cursor.moveToNext();
+        }
+        return documents;
+    }
+
     public void close(){
         db.close();
     }

@@ -8,6 +8,7 @@
 
     <ListView
         android:id="@+id/listview"
+        android:descendantFocusability="blocksDescendants"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
@@ -20,6 +21,8 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_new_case"
         android:layout_width="wrap_content"
+        android:focusable="false"
+        android:clickable="false"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"

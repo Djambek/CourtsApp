@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Courts"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".CourtCaseDB"
+            android:exported="false" />
+        <activity
             android:name=".CourtCase"
             android:exported="false" />
         <activity
