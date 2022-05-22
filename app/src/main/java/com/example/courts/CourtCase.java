@@ -227,6 +227,7 @@ public class CourtCase extends AppCompatActivity {
                     db.addHistory(for_db.get(0), history);
                     db.addPlaceHistory(for_db.get(0), history_place);
                     db.addDocuments(for_db.get(0), documents);
+                    Log.d("SESSIONS", String.valueOf(sessions));
                     db.addSessions(for_db.get(0), sessions);
 
                     db.close();

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+
 //        Intent intent_alarm = new Intent(this, CheckCase.class);
 //        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent_alarm, 0);
 //

@@ -78,12 +78,12 @@ public class DataBase {
     void addSessions(String id, ArrayList<String> args){
         for (int i = 0; i < args.size() / 6; i++) {
             for (int j = 0; j < 6; j++) {
-                if (args.get(i*3+j).equals("")){
-                    args.set(i*3+j, null);
+                if (args.get(i*6+j).equals("")){
+                    args.set(i*6+j, null);
                 }
             }
-            String query = String.format("INSERT INTO 'sessions' VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')", id, args.get(i*3), args.get(i*3+1),
-                    args.get(i*3+2), args.get(i*3+3), args.get(i*3+4), args.get(i*3+5));
+            String query = String.format("INSERT INTO 'sessions' VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')", id, args.get(i*6), args.get(i*6+1),
+                    args.get(i*6+2), args.get(i*6+3), args.get(i*6+4), args.get(i*6+5));
             db.execSQL(query);
         }
     }
