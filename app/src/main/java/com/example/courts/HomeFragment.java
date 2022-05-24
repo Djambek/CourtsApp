@@ -33,9 +33,12 @@ public class HomeFragment extends Fragment {
         for (String id : ids){
             Log.d("__Info", String.valueOf(db.getShortInfo(id)));
         }
-
+        ArrayList<Boolean> colors = new ArrayList<Boolean>();
+        for(String id: ids){
+            colors.add(db.getColor(id));
+        }
         Log.d("IDS", String.valueOf(ids));
-        listview.setAdapter(new Short_info_db_adapter(getContext(), ids));
+        listview.setAdapter(new Short_info_db_adapter(getContext(), ids, colors));
 
         super.onResume();
     }
@@ -46,11 +49,17 @@ public class HomeFragment extends Fragment {
         db = new DataBase(getContext());
         ids = db.get_all_id();
         CheckCase checkCase = new CheckCase();
-        checkCase.checkUpdate(getContext(), ids.get(0));
+        if (ids.size()>0) {
+            checkCase.checkUpdate(getContext(), ids.get(0));
+        }
+        ArrayList<Boolean> colors = new ArrayList<Boolean>();
+        for(String id: ids){
+            colors.add(db.getColor(id));
+        }
 
         listview = view.findViewById(R.id.listview);
         Log.d("_ID", String.valueOf(ids));
-        listview.setAdapter(new Short_info_db_adapter(getContext(), ids));
+        listview.setAdapter(new Short_info_db_adapter(getContext(), ids, colors));
         Log.d("S__", "help");
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,7 +74,7 @@ public class HomeFragment extends Fragment {
                 Log.d("ASDF", "Создался новый фрагмент");
                 //CourtCaseDBFragment fragment = new CourtCaseDBFragment(db.getMainInfo(id), db.getHistory(id), db.getPlaceHistory(id), db.getSessions(id), db.getDocument(id));
                 Log.d("Main Info_", String.valueOf(db.getMainInfo(id)));
-
+                db.deleteColor(id);
                 Intent intent = new Intent(getContext(), CourtCaseDB.class);
                 intent.putStringArrayListExtra("main_info", db.getMainInfo(id));
                 intent.putStringArrayListExtra("history", db.getHistory(id));

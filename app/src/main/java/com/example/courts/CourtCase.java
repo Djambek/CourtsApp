@@ -219,6 +219,7 @@ public class CourtCase extends AppCompatActivity {
             public void onClick(View view) {
                 DataBase db = new DataBase(getApplicationContext());
                 if (!db.exist(for_db.get(0))){
+                    Log.d("PARTS", String.valueOf(for_db));
                     db.addNewCase(for_db.get(0), for_db.get(1), for_db.get(2), for_db.get(3), for_db.get(4), for_db.get(5),
                             for_db.get(6), for_db.get(7), for_db.get(8), for_db.get(9),
                             for_db.get(10), for_db.get(11), for_db.get(12), for_db.get(13),

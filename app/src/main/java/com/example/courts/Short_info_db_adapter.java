@@ -1,6 +1,7 @@
 package com.example.courts;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Short_info_db_adapter extends BaseAdapter {
+    ArrayList<Boolean> colors;
     Context context;
     ArrayList<String> ids;
     DataBase db;
 
-    Short_info_db_adapter(Context context, ArrayList<String> ids){
+    Short_info_db_adapter(Context context, ArrayList<String> ids, ArrayList<Boolean> colors){
         this.ids = ids;
         this.context = context;
+        this.colors = colors;
         db = new DataBase(context);
     }
     @Override
@@ -50,6 +53,13 @@ public class Short_info_db_adapter extends BaseAdapter {
 
         TextView text_def = my_view.findViewById(R.id.text_spinner_defendant);
         text_def.setText(def.get(0)+ def.get(1));
+
+        if (colors.get(i)){
+            number.setBackgroundColor(Color.GREEN);
+            text_def.setBackgroundColor(Color.GREEN);
+            text_plain.setBackgroundColor(Color.GREEN);
+            my_view.setBackgroundColor(Color.GREEN);
+        }
 
         return my_view;
     }

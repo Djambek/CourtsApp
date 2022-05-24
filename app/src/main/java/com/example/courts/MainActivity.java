@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,11 +24,15 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
 
 import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
         // тут происходить создание таблицы
         DataBase db = new DataBase(this);
         db.close();
+
 
         Paper.init(this);
         Log.d("PAPER", Paper.book().read("city")+"a");
@@ -82,8 +88,21 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
+//        Intent intent = new Intent(MainActivity.this, CheckCase.class);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR, 19);
+//        calendar.set(Calendar.MINUTE, 5);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        ((AlarmManager) getSystemService(ALARM_SERVICE)).setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-
+//        Calendar updateTime = Calendar.getInstance();
+//        updateTime.set(Calendar.SECOND, 5);
+//        Intent alarmIntent = new Intent(this, CheckCase.class);
+//        PendingIntent recurringDownload = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//        AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        alarms.cancel(recurringDownload);
+//        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP, updateTime.getTimeInMillis(), 1000 * 5, recurringDownload); //will run it after every 5 seconds.
 
 
 //        Intent intent_alarm = new Intent(this, CheckCase.class);
@@ -92,9 +111,10 @@ public class MainActivity extends AppCompatActivity{
 //        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 //        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
 //                100, alarmIntent);
-        Runnable mToastRunnable;
-        Handler mHandler = new Handler();
-
+        Timer timer = new Timer();
+        Date executionDate = new Date();
+        long period = 10 * 1000;
+        timer.scheduleAtFixedRate(new CheckCase(), executionDate, period);
 
 
 

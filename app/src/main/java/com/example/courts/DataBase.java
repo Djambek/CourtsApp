@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 public class DataBase {
     /** Поле контекста */
     Context context;
@@ -99,6 +101,16 @@ public class DataBase {
             db.execSQL(query);
         }
     }
+
+    public void addColor(String id){
+        db.execSQL(String.format("INSERT INTO 'color' VALUES ('%s')", id));
+    }
+
+    public boolean getColor(String id){
+        Cursor cursor = db.rawQuery(String.format("SELECT id FROM 'color' WHERE id='%s'", id), null);
+        return cursor.moveToFirst();
+    }
+
 
 
     public boolean exist(String id){
@@ -201,6 +213,9 @@ public class DataBase {
         }
         return sessions;
     }
+
+
+
     public ArrayList<String> getMainInfo(String id){
         ArrayList<String> info = new ArrayList<>();
         String query = String.format("SELECT * FROM 'case' WHERE id='%s'", id);
@@ -236,12 +251,60 @@ public class DataBase {
         }
         return null;
     }
+    public ArrayList<String> getOnlyInfo(String id) {
+        ArrayList<String> info = new ArrayList<>();
+        String query = String.format("SELECT * FROM 'case' WHERE id='%s'", id);
+        String[] columns = new String[]{"id", "number", "number_input_document", "register_date",
+                "date_hearing_first_instance", "date_of_appellate_instance", "result_hearing", "number_in_next_instance",
+                "number_in_last_instance", "judge", "category",
+                "status", "article", "reasons_solve", "date_of_decision"};
+        Cursor cursor = db.rawQuery(query, null);
+        boolean hasMoreDate = cursor.moveToFirst();
+        if (hasMoreDate) {
+            for (int i = 0; i < columns.length; i++) {
+                String res = cursor.getString(cursor.getColumnIndexOrThrow(columns[i])).equals("null") ? "" : cursor.getString(cursor.getColumnIndexOrThrow(columns[i]));
+                info.add(res);
+            }
+        }
+        return info;
+    }
+
+    public ArrayList<String> getParticipants(String id){
+        ArrayList<String> parts = new ArrayList<>();
+        String query = String.format("SELECT type, name FROM 'participants' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        boolean hasMoreDate = cursor.moveToFirst();
+        while (hasMoreDate){
+            parts.add(cursor.getString(cursor.getColumnIndexOrThrow("type")));
+            parts.add(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+            hasMoreDate = cursor.moveToNext();
+        }
+        return parts;
+
+    }
+
     public void delete(String id){
         db.execSQL(String.format("DELETE FROM 'case' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'participants' WHERE id='%s'", id));
         db.execSQL(String.format("DELETE FROM 'history' WHERE id='%s'", id));
         db.execSQL(String.format("DELETE FROM 'places_history' WHERE id='%s'", id));
         db.execSQL(String.format("DELETE FROM 'sessions' WHERE id='%s'", id));
         db.execSQL(String.format("DELETE FROM 'documents' WHERE id='%s'", id));
+        db.execSQL(String.format("DELETE FROM 'color' WHERE id='%s'", id));
+    }
+
+    public void deleteColor(String id){
+        db.execSQL(String.format("DELETE FROM 'color' WHERE id='%s'", id));
+    }
+
+    public String getNumberCase(String id){
+        String query = String.format("SELECT number FROM 'case' WHERE id='%s'", id);
+        Cursor cursor = db.rawQuery(query, null);
+        boolean hasMoreData = cursor.moveToFirst();
+        if (hasMoreData){
+            return cursor.getString(cursor.getColumnIndexOrThrow("number"));
+        }
+        return null;
     }
 
     public ArrayList<String> getDocument(String id){
@@ -265,9 +328,7 @@ public class DataBase {
         db.close();
     }
 
-    public void dropTable(){
-        db.execSQL("DROP TABLE 'case'; ");
-    }
+
 
     public void createTable() {
         Log.d("D__", "CREATED");
@@ -284,6 +345,9 @@ public class DataBase {
         db.execSQL("CREATE TABLE if not exists 'sessions' ('id' text, 'date' text, 'hall' text, 'stage' text, 'result' text, 'reason' text, 'video' text);");
         db.execSQL("CREATE TABLE if not exists 'history' ('id' text, 'date' text, 'status' text, 'document' text);");
         db.execSQL("CREATE TABLE if not exists 'documents' ('id' text, 'date' text, 'kind_document' text, 'document_text' text);");
+        db.execSQL("CREATE TABLE if not exists 'color' ('id' text);");
     }
+
+
 
 }

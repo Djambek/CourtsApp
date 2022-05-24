@@ -1,12 +1,13 @@
 package com.example.courts;
 
-import android.content.BroadcastReceiver;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.collection.ArraySet;
+import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,14 +18,22 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TimerTask;
 
-public class CheckCase {
+public class CheckCase extends TimerTask {
     JSONObject jsonObject = null;
-    static ArrayList<String> participants; // участники из таблицы
+    Context context;
 
     public void checkUpdate(Context context, String id) {
         DataBase db = new DataBase(context);
         String link = db.getLink(id);
+        this.context = context;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("My notification", "My notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = context.getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
 
 
         Thread thread = new Thread() {
@@ -34,6 +43,7 @@ public class CheckCase {
                     Document res = Jsoup.connect("http://ctf.djambek.com:8080/details?link=" + link).maxBodySize(0).ignoreContentType(true).get();
                     jsonObject = new JSONObject(res.text());
                 } catch (IOException | JSONException e) {
+                    Log.d("JSON", "WAS ERROR F");
                     e.printStackTrace();
                 }
 
@@ -45,24 +55,106 @@ public class CheckCase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d("EQUALS MAIN INFO", String.valueOf(diffMainInfo(db, id, jsonObject)));
-        Log.d("EQUALS PARTICIPANTS", String.valueOf(diffParticipants(participants, jsonObject)));
-        Log.d("EQUALS HISTORY", String.valueOf(diffHistory(db, id, jsonObject)));
-        Log.d("EQUALS HISTORY PLACE", String.valueOf(diffHistoryPlace(db, id, jsonObject)));
-        Log.d("EQUALS SESSIONS", String.valueOf(diffSessions(db, id, jsonObject)));
-        Log.d("EQUALS DOCUMENTS", String.valueOf(diffDocuments(db, id, jsonObject)));
+        Log.d("JSON", String.valueOf(jsonObject));
 
-
+        Log.d("EQUALS MAIN INFO", String.valueOf(equalMainInfo(db, id, jsonObject)));
+        Log.d("EQUALS PARTICIPANTS", String.valueOf(equalParticipants(db, id, jsonObject)));
+        Log.d("EQUALS HISTORY", String.valueOf(equalHistory(db, id, jsonObject)));
+        Log.d("EQUALS HISTORY PLACE", String.valueOf(equalHistoryPlace(db, id, jsonObject)));
+        Log.d("EQUALS SESSIONS", String.valueOf(equalSessions(db, id, jsonObject)));
+        Log.d("EQUALS DOCUMENTS", String.valueOf(equalDocuments(db, id, jsonObject)));
+        updateCase(db, id, jsonObject, context);
 
     }
+    public static boolean updateCase(DataBase db, String id, JSONObject jsonObject, Context context){
+        ArrayList<String> info = equalMainInfo(db, id, jsonObject);
+        ArrayList<String> parts = equalParticipants(db, id, jsonObject);
+        ArrayList<String> history = equalHistory(db, id, jsonObject);
+        ArrayList<String> history_place = equalHistoryPlace(db, id, jsonObject);
+        ArrayList<String> sessions = equalSessions(db, id, jsonObject);
+        ArrayList<String> documents = equalDocuments(db, id, jsonObject);
+        String notification = null;
+        String number = db.getNumberCase(id);
+        boolean needUpdate = false;
+        if(!info.get(0).equals("true")){
+            notification = "Изменилась главная информация по делу" ;
+            needUpdate = true;
+        }else{
+            info = db.getOnlyInfo(id);
+        }
+        if(!parts.get(0).equals("true")){
+            notification = "Изменились участники по делу";
+            needUpdate = true;
+        }else{
+            parts = db.getParticipants(id);
+        }
+        if(!history.get(0).equals("true")){
+            notification = "Изменилась история состояний по делу";
+            needUpdate = true;
+        }else{
+            history = db.getHistory(id);
+        }
+        if(!history_place.get(0).equals("true")){
+            notification = "Изменилась история местонахождения по делу";
+            needUpdate = true;
+        }else{
+            history_place = db.getPlaceHistory(id);
+        }
+        if(!sessions.get(0).equals("true")){
+            notification = "Изменились судебные заседания по делу";
+            needUpdate = true;
+        }else{
+            sessions = db.getSessions(id);
+        }
+        if(!documents.get(0).equals("true")){
+            notification = "Изменились судебные акты по делу";
+            needUpdate = true;
+        }else{
+            documents = db.getDocument(id);
+        }
+        needUpdate = true;
+        if(needUpdate){
+            String link = db.getLink(id);
+            db.delete(id);
+            ArrayList<ArrayList<String>> part_for_db = new ArrayList<>();
+            Log.d("UPDATE PARTS", String.valueOf(parts));
+            for (int i = 0; i < parts.size(); i+=2) {
+                part_for_db.add(new ArrayList<>(Arrays.asList(parts.get(i), parts.get(i+1))));
+            }
+            db.addNewCase(info.get(0), info.get(1), info.get(2),
+                    info.get(3), info.get(4), info.get(5),
+                    info.get(6), info.get(7), info.get(8),
+                    info.get(9), info.get(10), info.get(11),
+                    info.get(12), info.get(13), info.get(14),
+                    link, part_for_db);
+            db.addHistory(id, history);
+            db.addPlaceHistory(id, history_place);
+            db.addDocuments(id, documents);
+            db.addSessions(id, sessions);
+            db.addColor(id);
+            db.close();
+            notification = "Типа уведомление";
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "My notification");
+            builder.setContentTitle(number);
+            builder.setContentText(notification);
+            builder.setSmallIcon(R.drawable.ic_court);
+            builder.setAutoCancel(true);
 
-    public static boolean diffParticipants(ArrayList<String> participants, JSONObject jsonObject){
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+            managerCompat.notify(1, builder.build());
+        }
+        return needUpdate;
+    }
+
+    public static ArrayList<String> equalParticipants(DataBase db, String id, JSONObject jsonObject){
         ArrayList<String> part_list = new ArrayList<>();
 
         try {
             JSONArray parts = jsonObject.getJSONArray("participants");
             for (int i = 0; i < parts.length(); i++) {
+                String type = parts.getJSONObject(i).getString("type");
                 String name = parts.getJSONObject(i).getString("name");
+                part_list.add(type);
                 part_list.add(name);
             }
         } catch (JSONException e) {
@@ -70,16 +162,17 @@ public class CheckCase {
             e.printStackTrace();
         }
 
-        Log.d("FROM_DB_PARTS", String.valueOf(participants));
-        Log.d("FROM_INT_PATS", String.valueOf(part_list));
+        Log.d("FROM_DB_PARTS", String.valueOf(db.getParticipants(id)));
+        Log.d("FROM_DB_PARTS_SIZE", String.valueOf(db.getParticipants(id).size()));
+        Log.d("FROM_INT_PARTS", String.valueOf(part_list));
 
-        if (participants.equals(part_list)) {
-           return true;
+        if (db.getParticipants(id).equals(part_list)) {
+           return new ArrayList<String>(Arrays.asList("true"));
         }
-        return false;
+        return part_list;
     }
 
-    public static boolean diffDocuments(DataBase db, String id, JSONObject jsonObject){
+    public static ArrayList<String> equalDocuments(DataBase db, String id, JSONObject jsonObject){
         // парсим судебные акты
         ArrayList<String> documents = new ArrayList<>();
         try {
@@ -93,13 +186,13 @@ public class CheckCase {
             e.printStackTrace();
         }
         if (db.getDocument(id).equals(documents)) {
-            return true;
+            return new ArrayList<>(Arrays.asList("true"));
         }
-        return false;
+        return documents;
 
     }
 
-    public static boolean diffHistoryPlace(DataBase db, String id, JSONObject jsonObject){
+    public static ArrayList<String> equalHistoryPlace(DataBase db, String id, JSONObject jsonObject){
         // парсим историю местонахождений
         ArrayList<String> history_place = new ArrayList<>();
         try {
@@ -113,12 +206,12 @@ public class CheckCase {
             e.printStackTrace();
         }
         if (db.getPlaceHistory(id).equals(history_place)){
-            return true;
+            return new ArrayList<>(Arrays.asList("true"));
         }
-        return false;
+        return history_place;
     }
 
-    public static boolean diffSessions(DataBase db, String id, JSONObject jsonObject){
+    public static ArrayList<String> equalSessions(DataBase db, String id, JSONObject jsonObject){
         // парсим судебные заседания и и беседы
         ArrayList<String> sessions = new ArrayList<>();
         try {
@@ -140,16 +233,16 @@ public class CheckCase {
         Log.d("FROM_INTERN_SESSIONS", String.valueOf(sessions));
 
         if (db.getSessions(id).equals(sessions)) {
-            return true;
+            return new ArrayList<>(Arrays.asList("true"));
         } else {
-            return false;
+            return sessions;
         }
     }
 
-    public static boolean diffHistory(DataBase db, String id, JSONObject jsonObject){
+    public static ArrayList<String> equalHistory(DataBase db, String id, JSONObject jsonObject){
         Log.d("FROM_HISTORY", String.valueOf(db.getHistory(id)));
-
         ArrayList<String> history = new ArrayList<>();
+
         try {
             JSONArray history_json = jsonObject.getJSONArray("history");
             for (int i = 0; i < history_json.length(); i++) {
@@ -165,29 +258,19 @@ public class CheckCase {
         }
         Log.d("FROM_HISTORY_INTER", String.valueOf(history));
         if (db.getHistory(id).equals(history)) {
-           return true;
+           return new ArrayList<>(Arrays.asList("true"));
         }
-        return false;
+        return history;
     }
 
-    public static boolean diffMainInfo(DataBase db, String id, JSONObject jsonObject) {
-        ArrayList<String> from_db_main_info = db.getMainInfo(id);
-        Log.d("FROM", String.valueOf(from_db_main_info));
-        ArrayList<String> from_db_info = new ArrayList<>();
-        for (int j = 1; j < from_db_main_info.size(); j += 2) {
-            from_db_info.add(from_db_main_info.get(j));
-        }
-        Log.d("FROM", String.valueOf(from_db_info));
-        participants = new ArrayList<>(Arrays.asList(from_db_info.get(4), from_db_info.get(3)));
-        // Удаляем участников
-        from_db_info.remove(3);
-        from_db_info.remove(3);
-
+    public static ArrayList<String> equalMainInfo(DataBase db, String id, JSONObject jsonObject) {
+        ArrayList<String> from_db_info = db.getOnlyInfo(id);
+        ArrayList<String> from_internet = new ArrayList<>();
         String[] args = new String[]{"id", "number", "number_input_document",
                 "register_date", "date_hearing_first_instance",
                 "date_of_appellate_instance", "result_hearing", "number_in_next_instance", "number_in_last_instance", "judge", "category",
                 "status", "article", "resons_solve", "date_of_decision"};
-        ArrayList<String> from_internet = new ArrayList<>();
+
         for (int i = 0; i < args.length; i++) {
             try {
                 if (!jsonObject.getString(args[i]).equals("")) {
@@ -203,10 +286,13 @@ public class CheckCase {
         Log.d("FROM DB", String.valueOf(from_db_info));
         Log.d("FROM_INTERN", String.valueOf(from_internet));
         if (from_db_info.equals(from_internet)) {
-            return true;
+            return new ArrayList<>(Arrays.asList("true"));
         }
-        return false;
+        return from_internet;
     }
 
-
+    @Override
+    public void run() {
+        Log.d("TIMER", "Started");
+    }
 }

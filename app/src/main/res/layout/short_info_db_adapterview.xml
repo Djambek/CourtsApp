@@ -3,20 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <TextView
         android:id="@+id/text_spinner_number_case"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_spinner_plaintiff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:text="TextView"
         android:textSize="15sp"
@@ -27,6 +30,7 @@
         android:id="@+id/text_spinner_defendant"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
