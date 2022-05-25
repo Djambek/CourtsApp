@@ -80,39 +80,10 @@ public class HomeFragment extends Fragment {
                 intent.putStringArrayListExtra("documents", db.getDocument(id));
                 startActivity(intent);
                 getActivity().getFragmentManager().popBackStackImmediate();
-                //getActivity().getSupportFragmentManager().popBackStackImmediate();
-                // попробовать сделать через активность!
-//                Log.d("Count", getActivity().getSupportFragmentManager().getBackStackEntryCount()+"");
-//                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() != 0){
-//                    Log.d("Imortant","Удаляем фрагмент");
-//                    getActivity().getSupportFragmentManager().popBackStack();}
-//                    getActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.fragment_container, fragment)
-//                            .addToBackStack(null)
-//                            .commit();
-//
-//                Log.d("Count", getActivity().getSupportFragmentManager().getBackStackEntryCount()+"");
 
-
-
-                //Intent intent = new Intent(getContext(), CourtCaseDB.class);
-                //intent.putStringArrayListExtra();
             }
         });
-//        listview.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                Log.d("S__", String.valueOf(adapterView.getItemAtPosition(i)));
-//                Log.d("S__", "a");
-//                Log.d("S__", i+"");
-//                Toast.makeText(getContext(), "ASDF", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
+
 
         FloatingActionButton b = view.findViewById(R.id.button_add_new_case);
         b.bringToFront();

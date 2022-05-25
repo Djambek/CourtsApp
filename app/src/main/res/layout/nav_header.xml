@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_court" />
+        app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/textView"
@@ -25,7 +25,7 @@
         android:layout_marginTop="-6dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
-        android:text="Суды России"
+        android:text="Ассисент юриста"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

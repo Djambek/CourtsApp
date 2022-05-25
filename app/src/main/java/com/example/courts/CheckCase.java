@@ -325,20 +325,6 @@ public class CheckCase extends Worker{
     @Override
     public Result doWork() {
         DataBase db = new DataBase(getApplicationContext());
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("My", "My", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getApplicationContext().getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "My");
-        builder.setContentTitle("ЦЩУК");
-        builder.setContentText("Чекаем дело");
-        builder.setSmallIcon(R.drawable.ic_court);
-        builder.setAutoCancel(true);
-
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
-        managerCompat.notify(1, builder.build());
 
         for(String id: db.get_all_id()){
             checkUpdate(db, id, getApplicationContext());
