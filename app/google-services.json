@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768259892355",
+    "project_id": "courts-c0420",
+    "storage_bucket": "courts-c0420.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768259892355:android:650e9e62f999ef6fb327b6",
+        "android_client_info": {
+          "package_name": "com.example.courts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768259892355-sf83lc6d4b120grjfu6t610q9aoi2758.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnEWTmgvtoBFB-Czu0s-csT08w4Z-_Ptw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768259892355-sf83lc6d4b120grjfu6t610q9aoi2758.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

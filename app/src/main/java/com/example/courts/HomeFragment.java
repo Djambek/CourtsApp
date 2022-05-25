@@ -48,11 +48,8 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         db = new DataBase(getContext());
         ids = db.get_all_id();
-        CheckCase checkCase = new CheckCase();
-        if (ids.size()>0) {
-            checkCase.checkUpdate(getContext(), ids.get(0));
-        }
-        ArrayList<Boolean> colors = new ArrayList<Boolean>();
+
+        ArrayList<Boolean> colors = new ArrayList<>();
         for(String id: ids){
             colors.add(db.getColor(id));
         }

@@ -1,12 +1,22 @@
 package com.example.courts;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.work.BackoffPolicy;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.app.AlarmManager;
 import android.app.Fragment;
@@ -14,9 +24,12 @@ import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -26,6 +39,9 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
 
@@ -34,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +105,30 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+
+//        Intent intent = new Intent();
+//        String packageName = this.getPackageName();
+//        PowerManager pm = (PowerManager)
+//                this.getSystemService(Context.POWER_SERVICE);
+//        if (pm.isIgnoringBatteryOptimizations(packageName))
+//            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+//        else {
+//            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+//            intent.setData(Uri.parse("package:" + packageName));
+//        }
+//        this.startActivity(intent);
+
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intent_ =  new Intent(MainActivity.this, CheckCase.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent_, 0);
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.HOUR, 18);
+//        calendar.set(Calendar.MINUTE, 11);
+//        calendar.set(Calendar.SECOND, 0);
+//        calendar.set(Calendar.MILLISECOND, 0);
+//        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
 //        Intent intent = new Intent(MainActivity.this, CheckCase.class);
 //        Calendar calendar = Calendar.getInstance();
 //        calendar.setTimeInMillis(System.currentTimeMillis());
@@ -111,11 +152,52 @@ public class MainActivity extends AppCompatActivity{
 //        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 //        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
 //                100, alarmIntent);
-        Timer timer = new Timer();
-        Date executionDate = new Date();
-        long period = 10 * 1000;
-        timer.scheduleAtFixedRate(new CheckCase(), executionDate, period);
+//        Intent intent = new Intent(this, CheckCase.class);
+//        PendingIntent sender = PendingIntent.getBroadcast(this, 2, intent, 0);
+//        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        long l = new Date().getTime();
+//        if (l < new Date().getTime()) {
+//            l += 1000*5;
+//        }
+//        Log.d("STARTED", "NOW ALARM WORK");
+//        am.setRepeating(AlarmManager.RTC_WAKEUP, l, 5000, sender); // 86400000
+//        Timer timer = new Timer();
+//        Date executionDate = new Date();
+//        long period = 10 * 1000;
+//        timer.scheduleAtFixedRate(new CheckCase(), executionDate, period);
+//        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+//        ses.scheduleAtFixedRate(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d("SHEDULE", "STARTED");
+//                Toast.makeText(MainActivity.this, "STARTED", Toast.LENGTH_SHORT).show();
+//            }
+        
+//        }, 0, 1, TimeUnit.SECONDS);
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 18);
+        calendar.set(Calendar.MINUTE, 44);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        PeriodicWorkRequest per_work = new PeriodicWorkRequest.Builder(CheckCase.class, 15,
+                        TimeUnit.MINUTES)
+                .addTag("TEST")
+                .build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "TEST",
+                ExistingPeriodicWorkPolicy.KEEP,
+                per_work
+        );
+//        Long timeDiff = calendar.getTimeInMillis() - System.currentTimeMillis();
+//        WorkRequest uploadWorkRequest =
+//                new OneTimeWorkRequest.Builder(TestWorker.class)
+//                        .setInitialDelay(timeDiff, TimeUnit.MICROSECONDS)
+//                        .build();
+//        WorkManager
+//                .getInstance(this)
+//                .enqueue(uploadWorkRequest);
 
 
         //create runnable for delay

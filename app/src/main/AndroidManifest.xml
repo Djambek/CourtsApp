@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
 
     <application
@@ -15,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Courts"
         android:usesCleartextTraffic="true">
-        <receiver android:process=":remote" android:name=".CheckCase"></receiver>
+
         <activity
             android:name=".CourtCaseDB"
             android:exported="false" />
@@ -40,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -2,12 +2,23 @@ package com.example.courts;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,14 +31,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TimerTask;
 
-public class CheckCase extends TimerTask {
-    JSONObject jsonObject = null;
-    Context context;
+public class CheckCase extends Worker{
+    static JSONObject jsonObject = null;
+    public CheckCase(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
 
-    public void checkUpdate(Context context, String id) {
-        DataBase db = new DataBase(context);
+    static public void checkUpdate(DataBase db, String id, Context context) {
         String link = db.getLink(id);
-        this.context = context;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("My notification", "My notification", NotificationManager.IMPORTANCE_DEFAULT);
@@ -57,6 +68,7 @@ public class CheckCase extends TimerTask {
         }
         Log.d("JSON", String.valueOf(jsonObject));
 
+
         Log.d("EQUALS MAIN INFO", String.valueOf(equalMainInfo(db, id, jsonObject)));
         Log.d("EQUALS PARTICIPANTS", String.valueOf(equalParticipants(db, id, jsonObject)));
         Log.d("EQUALS HISTORY", String.valueOf(equalHistory(db, id, jsonObject)));
@@ -76,6 +88,14 @@ public class CheckCase extends TimerTask {
         String notification = null;
         String number = db.getNumberCase(id);
         boolean needUpdate = false;
+
+
+
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+//        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+//        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+
+
         if(!info.get(0).equals("true")){
             notification = "Изменилась главная информация по делу" ;
             needUpdate = true;
@@ -83,36 +103,38 @@ public class CheckCase extends TimerTask {
             info = db.getOnlyInfo(id);
         }
         if(!parts.get(0).equals("true")){
-            notification = "Изменились участники по делу";
+            notification = "Изменились участники";
             needUpdate = true;
         }else{
             parts = db.getParticipants(id);
         }
         if(!history.get(0).equals("true")){
-            notification = "Изменилась история состояний по делу";
+            notification = "Изменилась история состояний";
             needUpdate = true;
         }else{
             history = db.getHistory(id);
         }
         if(!history_place.get(0).equals("true")){
-            notification = "Изменилась история местонахождения по делу";
+            notification = "Изменилась история местонахождения";
             needUpdate = true;
         }else{
             history_place = db.getPlaceHistory(id);
         }
         if(!sessions.get(0).equals("true")){
-            notification = "Изменились судебные заседания по делу";
+            notification = "Изменились судебные заседания";
             needUpdate = true;
         }else{
             sessions = db.getSessions(id);
         }
         if(!documents.get(0).equals("true")){
-            notification = "Изменились судебные акты по делу";
+            notification = "Изменились судебные акты";
             needUpdate = true;
         }else{
             documents = db.getDocument(id);
         }
-        needUpdate = true;
+
+
+        // needUpdate = true;
         if(needUpdate){
             String link = db.getLink(id);
             db.delete(id);
@@ -133,7 +155,7 @@ public class CheckCase extends TimerTask {
             db.addSessions(id, sessions);
             db.addColor(id);
             db.close();
-            notification = "Типа уведомление";
+            // notification = "Типа уведомление";
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "My notification");
             builder.setContentTitle(number);
             builder.setContentText(notification);
@@ -143,6 +165,7 @@ public class CheckCase extends TimerTask {
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
             managerCompat.notify(1, builder.build());
         }
+        db.close();
         return needUpdate;
     }
 
@@ -291,8 +314,29 @@ public class CheckCase extends TimerTask {
         return from_internet;
     }
 
+
+    @NonNull
     @Override
-    public void run() {
-        Log.d("TIMER", "Started");
+    public Result doWork() {
+        DataBase db = new DataBase(getApplicationContext());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("MY_", "MY_", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getApplicationContext().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "MY_");
+        builder.setContentTitle("WORKER");
+        builder.setContentText("Чекнули дела");
+        builder.setSmallIcon(R.drawable.ic_court);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+        managerCompat.notify(3, builder.build());
+        for(String id: db.get_all_id()){
+            checkUpdate(db, id, getApplicationContext());
+        }
+        return Result.success();
     }
 }
