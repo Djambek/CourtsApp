@@ -2,15 +2,15 @@ package com.example.courts;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.job.JobParameters;
-import android.app.job.JobService;
-import android.content.BroadcastReceiver;
+
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 
+
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -29,7 +29,7 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.TimerTask;
+
 
 public class CheckCase extends Worker{
     static JSONObject jsonObject = null;
@@ -133,8 +133,6 @@ public class CheckCase extends Worker{
             documents = db.getDocument(id);
         }
 
-
-        // needUpdate = true;
         if(needUpdate){
             String link = db.getLink(id);
             db.delete(id);
@@ -162,6 +160,14 @@ public class CheckCase extends Worker{
             builder.setSmallIcon(R.drawable.ic_court);
             builder.setAutoCancel(true);
 
+            Intent resultIntent = new Intent(context, MainActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addNextIntentWithParentStack(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(0,
+                            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+            builder.setContentIntent(resultPendingIntent);
             NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
             managerCompat.notify(1, builder.build());
         }
@@ -320,20 +326,20 @@ public class CheckCase extends Worker{
     public Result doWork() {
         DataBase db = new DataBase(getApplicationContext());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("MY_", "MY_", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("My", "My", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getApplicationContext().getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
 
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "MY_");
-        builder.setContentTitle("WORKER");
-        builder.setContentText("Чекнули дела");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "My");
+        builder.setContentTitle("ЦЩУК");
+        builder.setContentText("Чекаем дело");
         builder.setSmallIcon(R.drawable.ic_court);
         builder.setAutoCancel(true);
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
-        managerCompat.notify(3, builder.build());
+        managerCompat.notify(1, builder.build());
+
         for(String id: db.get_all_id()){
             checkUpdate(db, id, getApplicationContext());
         }

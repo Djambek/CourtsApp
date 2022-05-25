@@ -12,11 +12,8 @@ import android.util.Log;
 import org.json.JSONObject;
 
 public class DataBase {
-    /** Поле контекста */
     Context context;
-    /** Поле название базы данных */
     final String DB_NAME = "all_info.db";
-    /** Поле базыданных */
     final SQLiteDatabase db;
     private static DataBase dbManager;
 

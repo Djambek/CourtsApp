@@ -5,13 +5,11 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 
 import io.paperdb.Paper;
@@ -27,11 +25,16 @@ public class FirstRun extends AppCompatActivity {
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
+
+
+
         // работаю со выпадным списком
         Spinner spinner = findViewById(R.id.spinner_cities);
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cities);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+
         final String[] result = new String[1];
 
         AdapterView.OnItemSelectedListener itemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -46,7 +49,7 @@ public class FirstRun extends AppCompatActivity {
         spinner.setOnItemSelectedListener(itemSelectedListener);
         spinner.setAdapter(adapter);
 
-        Button b = findViewById(R.id.button_city_selection_confirmation);
+        Button b = findViewById(R.id.button_save_settings);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
