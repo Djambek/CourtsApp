@@ -69,28 +69,6 @@ public class CourtCaseDBFragment extends Fragment {
         adapter.addFragment(fragment_extra, "Дополнительное");
         viewPager.setAdapter(adapter);
 
-
-//        ViewPageAdapter view_adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//        TabLayout tabLayout = view.findViewById(R.id.tablayout);
-//        ViewPager viewPager = view.findViewById(R.id.viewpage);
-//
-//        Bundle args_main = new Bundle();
-//        args_main.putStringArrayList("info", main_info);
-//        MainCaseInfoFragment mainCaseInfoFragment = new MainCaseInfoFragment();
-//        mainCaseInfoFragment.setArguments(args_main);
-//        view_adapter.addFragment(mainCaseInfoFragment, "Главное");
-//
-//        ExtraCaseInfoFragment extraCaseInfoFragment = new ExtraCaseInfoFragment();
-//        Bundle args_extra = new Bundle();
-//        args_extra.putStringArrayList("history", history);
-//        args_extra.putStringArrayList("history_place", history_place);
-//        args_extra.putStringArrayList("sessions", sessions);
-//        args_extra.putStringArrayList("documents", documents);
-//        extraCaseInfoFragment.setArguments(args_extra);
-//        view_adapter.addFragment(extraCaseInfoFragment, "Дополнительное");
-//        Log.d("FR_HI", String.valueOf(history));
-//
-//        tabLayout.setupWithViewPager(viewPager);
         Log.d("STARTED", "Стартанули получение из дб");
         return view;
     }

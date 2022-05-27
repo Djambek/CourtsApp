@@ -114,11 +114,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR, 18);
-        calendar.set(Calendar.MINUTE, 44);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
         PeriodicWorkRequest per_work = new PeriodicWorkRequest.Builder(CheckCase.class, 8,
                         TimeUnit.HOURS)
                 .addTag("TEST")

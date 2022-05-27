@@ -312,8 +312,6 @@ public class CheckCase extends Worker{
                 e.printStackTrace();
             }
         }
-        Log.d("FROM DB", String.valueOf(from_db_info));
-        Log.d("FROM_INTERN", String.valueOf(from_internet));
         if (from_db_info.equals(from_internet)) {
             return new ArrayList<>(Arrays.asList("true"));
         }
@@ -325,7 +323,6 @@ public class CheckCase extends Worker{
     @Override
     public Result doWork() {
         DataBase db = new DataBase(getApplicationContext());
-
         for(String id: db.get_all_id()){
             checkUpdate(db, id, getApplicationContext());
         }
